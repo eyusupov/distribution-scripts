@@ -6,10 +6,10 @@ RUN apt-get update \
  && apt-get install -y build-essential libevent-core-2.0-5 libevent-dev libevent-extra-2.0-5 libevent-openssl-2.0-5 libevent-pthreads-2.0-5 libpcre3-dev automake libtool pkg-config git software-properties-common apt-transport-https curl \
  && (pkg-config || true)
 
-RUN add-apt-repository "deb http://apt.llvm.org/jessie/ llvm-toolchain-jessie-4.0 main" \
+RUN add-apt-repository "deb http://apt.llvm.org/jessie/ llvm-toolchain-jessie-5.0 main" \
  && curl -sSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
  && apt-get update \
- && apt-get install -y llvm-4.0-dev
+ && apt-get install -y llvm-5.0-dev
 
 ARG previous_crystal_release
 ADD ${previous_crystal_release} /tmp/crystal.tar.gz
@@ -54,7 +54,7 @@ FROM ${alpine_image}
 # Install dependencies
 RUN apk add --no-cache \
       # Statically-compiled llvm
-      llvm4-dev llvm4-static \
+      llvm5-dev llvm5-static \
       # Static zlib, libyaml, pcre, and libevent
       zlib-dev yaml-dev pcre-dev libevent-dev \
       # Build tools
@@ -77,7 +77,7 @@ RUN git clone https://github.com/ivmai/bdwgc \
  && make -j$(nproc) CFLAGS=-DNO_GETCONTEXT
 
 ENV LIBRARY_PATH=/bdwgc/.libs/
-ENV PATH=/usr/lib/llvm4/bin:$PATH
+ENV PATH=/usr/lib/llvm5/bin:$PATH
 RUN llvm-config --version
 
 # Build crystal
